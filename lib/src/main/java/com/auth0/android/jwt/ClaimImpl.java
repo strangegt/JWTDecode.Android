@@ -74,11 +74,16 @@ class ClaimImpl extends BaseClaim {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T[] asArray(Class<T> tClazz) throws DecodeException {
+        return asArray(tClazz, new Gson());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T[] asArray(Class<T> tClazz, Gson gson) throws DecodeException {
         try {
             if (!value.isJsonArray() || value.isJsonNull()) {
                 return (T[]) Array.newInstance(tClazz, 0);
             }
-            Gson gson = new Gson();
             JsonArray jsonArr = value.getAsJsonArray();
             T[] arr = (T[]) Array.newInstance(tClazz, jsonArr.size());
             for (int i = 0; i < jsonArr.size(); i++) {
@@ -92,11 +97,15 @@ class ClaimImpl extends BaseClaim {
 
     @Override
     public <T> List<T> asList(Class<T> tClazz) throws DecodeException {
+        return asList(tClazz, new Gson());
+    }
+
+    @Override
+    public <T> List<T> asList(Class<T> tClazz, Gson gson) throws DecodeException {
         try {
             if (!value.isJsonArray() || value.isJsonNull()) {
                 return new ArrayList<>();
             }
-            Gson gson = new Gson();
             JsonArray jsonArr = value.getAsJsonArray();
             List<T> list = new ArrayList<>();
             for (int i = 0; i < jsonArr.size(); i++) {
@@ -106,5 +115,27 @@ class ClaimImpl extends BaseClaim {
         } catch (JsonSyntaxException e) {
             throw new DecodeException("Failed to decode claim as list", e);
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T as(Class<T> tClazz, Gson gson) throws DecodeException {
+        try {
+            if (value.isJsonNull()) {
+                return null;
+            }
+            if (!value.isJsonObject()) {
+                throw new DecodeException("Failed to decode claim is not object");
+            }
+            return gson.fromJson(value, tClazz);
+        } catch (JsonSyntaxException e) {
+            throw new DecodeException("Failed to decode claim as object", e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T as(Class<T> tClazz) throws DecodeException {
+        return as(tClazz, new Gson());
     }
 }

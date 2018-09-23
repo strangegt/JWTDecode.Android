@@ -3,6 +3,8 @@ package com.auth0.android.jwt;
 
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.Date;
@@ -42,15 +44,32 @@ class BaseClaim implements Claim {
     public Date asDate() {
         return null;
     }
-
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] asArray(Class<T> tClazz) throws DecodeException {
+        return asArray(tClazz, null);
+    }
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] asArray(Class<T> tClazz, Gson gson) throws DecodeException {
         return (T[]) Array.newInstance(tClazz, 0);
+    }
+    @Override
+    public <T> List<T> asList(Class<T> tClazz) throws DecodeException {
+        return asList(tClazz,null);
+    }
+    @Override
+    public <T> List<T> asList(Class<T> tClazz, Gson gson) throws DecodeException {
+        return Collections.emptyList();
     }
 
     @Override
-    public <T> List<T> asList(Class<T> tClazz) throws DecodeException {
-        return Collections.emptyList();
+    public <T> T as(Class<T> tClazz) throws DecodeException{
+        return as(tClazz,null);
+    }
+
+    @Override
+    public <T> T as(Class<T> tClazz, Gson gson) throws DecodeException {
+        return null;
     }
 }

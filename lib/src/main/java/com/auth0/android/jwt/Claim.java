@@ -2,6 +2,8 @@ package com.auth0.android.jwt;
 
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +65,26 @@ public interface Claim {
      * @return the value as an Array or an empty Array.
      * @throws DecodeException if the values inside the Array can't be converted to a class T.
      */
-    <T> T[] asArray(Class<T> tClazz) throws DecodeException;
+    <T> T[] asArray(Class<T> tClazz)throws DecodeException;
+
+    /**
+     * Get this Claim as an Array of type T.
+     * If the value isn't an Array, an empty Array will be returned.
+     *
+     * @return the value as an Array or an empty Array.
+     * @throws DecodeException if the values inside the Array can't be converted to a class T.
+     */
+    <T> T[] asArray(Class<T> tClazz, Gson gson)throws DecodeException;
+
+    /**
+     * Get this Claim as a List of type T.
+     * If the value isn't an Array, an empty List will be returned.
+     * This function allow to use custom Gson
+     *
+     * @return the value as a List or an empty List.
+     * @throws DecodeException if the values inside the List can't be converted to a class T.
+     */
+    <T> List<T> asList(Class<T> tClazz) throws DecodeException;
 
     /**
      * Get this Claim as a List of type T.
@@ -72,5 +93,27 @@ public interface Claim {
      * @return the value as a List or an empty List.
      * @throws DecodeException if the values inside the List can't be converted to a class T.
      */
-    <T> List<T> asList(Class<T> tClazz) throws DecodeException;
+    <T> List<T> asList(Class<T> tClazz, Gson gson) throws DecodeException;
+
+    @Nullable
+    /**
+     * Get this Claim as a object of class T.
+     * If the value is not a object, or null return null.
+     *
+     * @return the value as a object or null.
+     * @throws DecodeException if the value can't be converted to a class T.
+     */
+    <T> T as(Class<T> tClazz) throws DecodeException;
+
+    @Nullable
+    /**
+     * Get this Claim as a object of class T.
+     * If the value is not a object, or null return null.
+     * This function allow to use custom Gson
+     *
+     * @return the value as a object or null.
+     * @throws DecodeException if the value can't be converted to a class T.
+     */
+    <T> T as(Class<T> tClazz, Gson gson) throws DecodeException;
+
 }
